@@ -1,29 +1,20 @@
-<%@ page import="iut2.zahafkri_projet_java_web1.Etudiant" %>
-<%@ page import="iut2.zahafkri_projet_java_web1.GestionFactory" %><%--
-  Created by IntelliJ IDEA.
-  User: ilyas
-  Date: 06/12/2022
-  Time: 14:19
-  To change this template use File | Settings | File Templates.
---%>
-<%
-    int idEtu = Integer.parseInt(request.getParameter("id"));
-    Etudiant etudiantById = GestionFactory.getEtudiantById(idEtu);
-%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean id="etudiant" class="iut2.zahafkri_projet_java_web1.Etudiant" scope="request"/>
+<jsp:useBean id="nbAbsences" type="java.lang.Integer" scope="request"/>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Details</title>
-
-
+    <title>Etudiant</title>
 </head>
 <body>
+    <h1>Details Etudiant</h1>
+    <p style="color: darkmagenta">Nom : <jsp:getProperty name="etudiant" property="nom"/></p>
+    <p style="color: darkkhaki">Prenom : <jsp:getProperty name="etudiant" property="prenom"/></p>
+    <p style="color: dodgerblue">Absences : <%= nbAbsences %></p>
 
-<h1 style="color: crimson">Details</h1>
-<p style="color: darkmagenta">Nom : <%=etudiantById.getNom()%></p>
-<p style="color: darkkhaki">Prenom : <%=etudiantById.getPrenom()%></p>
-<p style="color: dodgerblue">Absences : <%=GestionFactory.getAbsencesByEtudiantId(idEtu)%></p>
-
+    <a href="index.jsp">Retour</a>
 </body>
 </html>
+
+
