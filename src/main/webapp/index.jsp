@@ -9,7 +9,7 @@
 <body>
     <h1>Etudiant</h1>
 <% for (Etudiant etudiant : GestionFactory.getEtudiants()) {%>
-    <a href="details.jsp?id=<%= etudiant.getId() %>"><%= etudiant.getPrenom() %> <%=etudiant.getNom()%></a>
+    <a href="servlettraitementdetails?id=<%= etudiant.getId() %>"><%= etudiant.getPrenom() %> <%=etudiant.getNom()%></a>
 <%}%>
 </body>
 </html>
