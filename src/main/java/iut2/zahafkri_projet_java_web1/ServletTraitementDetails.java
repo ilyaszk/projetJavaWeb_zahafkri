@@ -41,7 +41,7 @@ public class ServletTraitementDetails extends HttpServlet {
         request.setAttribute("nbAbsences", nbAbsences);
 
         // Forward vers details.jsp
-        loadJSP("/details.jsp", request, response);
+        loadJSP("/WEB-INF/JSP/details.jsp", request, response);
 
     }
 

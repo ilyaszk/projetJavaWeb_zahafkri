@@ -16,16 +16,24 @@ public class GestionFactory {
 	private static HashMap<Integer, Etudiant> intializeListEtudiants() {
 
 		// Création des étudiants
-		Etudiant etu1 = new Etudiant(0, "Brunet-Manquat", "Francis");
-		Etudiant etu2 = new Etudiant(1, "Martin", "Philippe");
+		Etudiant etu1 = new Etudiant(0, "Brunet-Manquat", "Francis",3,12,"AW");
+		Etudiant etu2 = new Etudiant(1, "Martin", "Philippe",2,15,"SIMO");
+		Etudiant etu3 = new Etudiant(2, "Dupont", "Jean",1,18,"DATA");
+		Etudiant etu4 = new Etudiant(3, "Durand", "Pierre",0,20,"AW");
+		Etudiant etu5 = new Etudiant(4, "Duchemin", "Marie",0,20,"SIMO");
+		Etudiant etu6 = new Etudiant(5, "Rouge", "Paul",0,20,"AW");
+		Etudiant etu7 = new Etudiant(6, "Vert", "Jacques",0,20,"ASSR");
 
 		// Création du hasmap (association clé/valeur)
 		// Association id -> etudiant
 		HashMap<Integer, Etudiant> listEtudiantsTemp = new HashMap<>();
 		listEtudiantsTemp.put(etu1.getId(), etu1);
 		listEtudiantsTemp.put(etu2.getId(), etu2);
-
-		//
+		listEtudiantsTemp.put(etu3.getId(), etu3);
+		listEtudiantsTemp.put(etu4.getId(), etu4);
+		listEtudiantsTemp.put(etu5.getId(), etu5);
+		listEtudiantsTemp.put(etu6.getId(), etu6);
+		listEtudiantsTemp.put(etu7.getId(), etu7);
 		return listEtudiantsTemp;
 	}
 

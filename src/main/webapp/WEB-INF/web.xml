@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
-         version="4.0">
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+*
+    <display-name>gestion-des-notes</display-name>
+
+    <!-- Titre de l'application -->
+    <context-param>
+        <param-name>title</param-name>
+        <param-value>gestion-des-notes</param-value>
+    </context-param>
+
+    <!-- URLs communes aux vues -->
+    <context-param>
+        <param-name>entetedepage</param-name>
+        <param-value>/WEB-INF/JSP/commun/entetedepage.jsp</param-value>
+    </context-param>
+    <context-param>
+        <param-name>pieddepage</param-name>
+        <param-value>/WEB-INF/JSP/commun/pieddepage.jsp</param-value>
+    </context-param>
+
+
+    <!--========= Jeu (v3) =========== -->
+    <!-- Servlet controleur -->
+    <servlet>
+        <servlet-name>controleur</servlet-name>
+        <servlet-class>iut2.zahafkri_projet_java_web1.controleur.Controleur</servlet-class>
+        <init-param>
+            <param-name>urlIndex</param-name>
+            <param-value>/WEB-INF/JSP/index.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>urlDetails</param-name>
+            <param-value>/WEB-INF/JSP/details.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>urlNotes</param-name>
+            <param-value>/WEB-INF/JSP/notes.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>urlAbsences</param-name>
+            <param-value>/WEB-INF/JSP/absences.jsp</param-value>
+        </init-param>
+    </servlet>
+
+    <!-- Mapping URL/Servlet -->
+    <servlet-mapping>
+        <servlet-name>controleur</servlet-name>
+        <url-pattern>/do/*</url-pattern>
+    </servlet-mapping>
+
+    <!--  fichiers d'accueil -->
+    <welcome-file-list>
+        <welcome-file>do</welcome-file>
+    </welcome-file-list>
+
 </web-app>
