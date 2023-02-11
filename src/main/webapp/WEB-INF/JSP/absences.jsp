@@ -3,6 +3,9 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
+<jsp:useBean id="etudiants" type="java.util.List<iut2.zahafkri_projet_java_web1.Etudiant>" scope="request"/>
+<jsp:useBean id="edit" type="java.lang.Boolean" scope="request"/>
+
 <html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -13,25 +16,48 @@
 <jsp:include page='<%= application.getInitParameter("entetedepage") %>'/>
 <h2>Voici le nombre d'absences des étudiants</h2>
 
-<table
-        class="table table-striped table-hover table-bordered table-sm">
-    <thead>
-    <tr>
-        <th scope="col">Nom</th>
-        <th scope="col">Prénom</th>
-        <th scope="col">Nombre d'absence</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% for (Etudiant etudiant : GestionFactory.getEtudiants()) {%>
-    <tr>
-        <td><%= etudiant.getNom() %></td>
-        <td><%= etudiant.getPrenom() %></td>
-        <td><%= etudiant.getNbAbsence() %></td>
-    </tr>
+<div class="d-grid">
+    <% if (!edit) {%>
+    <a class="btn btn-primary" href="<%=application.getContextPath()%>/do/absences?edit=true">Editer les absences</a>
+    <%} else {%>
+    <a class="btn btn-primary" href="<%=application.getContextPath()%>/do/absences">Terminer l'édition</a>
     <%}%>
-    </tbody>
-</table>
+    <table
+            class="table table-striped table-hover table-bordered table-sm">
+        <thead>
+        <tr>
+            <th scope="col">Groupe</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Nombre d'absence</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for (Etudiant etudiant : etudiants) {%>
+        <tr>
+            <td><%= etudiant.getGroupe().getNom() %>
+            </td>
+            <td><%= etudiant.getNom() %>
+            </td>
+            <td><%= etudiant.getPrenom() %>
+            </td>
+
+            <td>
+                <% if (!edit) {%>
+                <%= etudiant.getNbAbsences() %>
+                <%} else {%>
+                <form action="<%=application.getContextPath()%>/do/absences?edit=true" method="post" class="d-flex">
+                    <input type="hidden" name="id" value="<%= etudiant.getId() %>">
+                    <input type="number" name="nbAbsences" value="<%= etudiant.getNbAbsences() %>" class="form-control w-50">
+                    <input type="submit" value="Modifier" class="btn btn-primary">
+                </form>
+                <%}%>
+            </td>
+        </tr>
+        <%}%>
+        </tbody>
+    </table>
+</div>
 <jsp:include page='<%= application.getInitParameter("pieddepage") %>'/>
 
 </body>

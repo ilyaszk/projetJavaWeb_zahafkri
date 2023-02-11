@@ -3,6 +3,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
+<jsp:useBean id="etudiants" type="java.util.List<iut2.zahafkri_projet_java_web1.Etudiant>" scope="request" />
 <html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -15,20 +16,23 @@
 <%--tableau --%>
 
 <table
-        class="table table-striped table-hover table-bordered table-sm">
+        class="table table-striped table-hover">
     <thead>
     <tr>
+        <th scope="col">Groupe</th>
         <th scope="col">Nom</th>
         <th scope="col">Prenom</th>
         <th scope="col">Moyenne</th>
     </tr>
     </thead>
     <tbody>
-    <% for (Etudiant etudiant : GestionFactory.getEtudiants()) {%>
+    <% for (Etudiant etudiant : etudiants) {%>
     <tr>
+        <td><%= etudiant.getGroupe().getNom() %></td>
         <td><%= etudiant.getNom() %></td>
         <td><%= etudiant.getPrenom() %></td>
         <td><%= etudiant.getMoyenneGenerale() %></td>
+        <td><a class="btn btn-primary" href="<%=application.getContextPath()%>/do/details?id=<%= etudiant.getId() %>&edit=true">Modifier les notes</a></td>
     </tr>
     <%}%>
     </tbody>

@@ -1,29 +1,46 @@
 package iut2.zahafkri_projet_java_web1;
 
-public class Etudiant {
-	
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * Entity implementation class for Entity: Groupe
+ */
+@Entity
+public class Etudiant implements Serializable {
+
+	@Id
+	@GeneratedValue
 	private Integer id;
+
+	@Column(nullable = false)
 	private String prenom;
+
+	@Column(nullable = false)
 	private String nom;
-	private int nbAbsence;
-	private int moyenneGenerale;
-	private String groupe;
-	
+
+	private int nbAbsences;
+
+	private float moyenneGenerale;
+
+	@ManyToOne
+	@JoinColumn(name = "groupe_id")
+	private Groupe groupe;
+
+	//list<matiere>
+	@ManyToMany(mappedBy = "etudiants", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+	private List<Matiere> matieres;
+
+	private static final long serialVersionUID = 1L;
+
 	public Etudiant() {
 		super();
-	}
-
-	public Etudiant(Integer id, String prenom, String nom, int nbAbsence, int moyenneGenerale, String groupe) {
-		this.id = id;
-		this.prenom = prenom;
-		this.nom = nom;
-		this.nbAbsence = nbAbsence;
-		this.moyenneGenerale = moyenneGenerale;
-		this.groupe = groupe;
+		nbAbsences = 0;
 	}
 
 	public Integer getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(Integer id) {
@@ -31,7 +48,7 @@ public class Etudiant {
 	}
 
 	public String getPrenom() {
-		return prenom;
+		return this.prenom;
 	}
 
 	public void setPrenom(String prenom) {
@@ -39,34 +56,45 @@ public class Etudiant {
 	}
 
 	public String getNom() {
-		return nom;
+		return this.nom;
 	}
 
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
 
-	public int getNbAbsence() {
-		return nbAbsence;
+	public Groupe getGroupe() {
+		return this.groupe;
 	}
 
-	public void setNbAbsence(int nbAbsence) {
-		this.nbAbsence = nbAbsence;
+	public void setGroupe(Groupe groupe) {
+		this.groupe = groupe;
+		if (!groupe.getEtudiants().contains(this)) {
+			groupe.getEtudiants().add(this);
+		}
 	}
 
-	public int getMoyenneGenerale() {
+	public int getNbAbsences() {
+		return nbAbsences;
+	}
+
+	public void setNbAbsences(int nbAbsences) {
+		this.nbAbsences = nbAbsences;
+	}
+
+	public float getMoyenneGenerale() {
 		return moyenneGenerale;
 	}
 
-	public void setMoyenneGenerale(int moyenneGenerale) {
+	public void setMoyenneGenerale(float moyenneGenerale) {
 		this.moyenneGenerale = moyenneGenerale;
 	}
 
-	public String getGroupe() {
-		return groupe;
+	public List<Matiere> getMatieres() {
+		return matieres;
 	}
 
-	public void setGroupe(String groupe) {
-		this.groupe = groupe;
+	public void setMatieres(List<Matiere> matieres) {
+		this.matieres = matieres;
 	}
 }

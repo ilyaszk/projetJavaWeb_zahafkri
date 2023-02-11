@@ -11,16 +11,17 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
         <!-- Classes persistées - liées à tes tables de la base de données -->
-        <class>fr.iut2.projetjpa.data.Etudiant</class>
-        <class>fr.iut2.projetjpa.data.Groupe</class>
+        <class>iut2.zahafkri_projet_java_web1.Etudiant</class>
+        <class>iut2.zahafkri_projet_java_web1.Groupe</class>
+        <class>iut2.zahafkri_projet_java_web1.Matiere</class>
+        <class>iut2.zahafkri_projet_java_web1.NoteExamen</class>
 
         <!-- Propriétés de l'unité de persistence -->
         <properties>
-
             <!-- JDBC connection properties -->
             <!--  en SqlLite, sur un fichier de votre arborescence (en windows c:/etc...) -->
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:sqlite:/Users/hb/Documents/ Enseignement/SIL-4/BDs/ProjetJPA2023.sql"/>
+                      value="jdbc:sqlite:/home/ilyas/Documents/ModuleJavaWeb/Bdd/ProjetJPA2023.sql"/>
             <property name="javax.persistence.jdbc.user" value=""/>
             <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
 
@@ -46,8 +47,10 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
         <!-- Classes persistées - liées à tes tables de la base de données -->
-        <class>fr.iut2.projetjpa.data.Etudiant</class>
-        <class>fr.iut2.projetjpa.data.Groupe</class>
+        <class>iut2.zahafkri_projet_java_web1.Etudiant</class>
+        <class>iut2.zahafkri_projet_java_web1.Groupe</class>
+        <class>iut2.zahafkri_projet_java_web1.Matiere</class>
+
 
         <!-- Propriétés de l'unité de persistence -->
         <properties>
@@ -79,9 +82,9 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
         <!-- Classes persistées - liées à tes tables de la base de données -->
-        <class>fr.iut2.projetjpa.data.Etudiant</class>
-        <class>fr.iut2.projetjpa.data.Groupe</class>
-
+        <class>iut2.zahafkri_projet_java_web1.Etudiant</class>
+        <class>iut2.zahafkri_projet_java_web1.Groupe</class>
+        <class>iut2.zahafkri_projet_java_web1.Matiere</class>
         <!-- Propriétés de l'unité de persistence -->
         <properties>
 
@@ -110,9 +113,9 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
         <!-- Classes persistées - liées à tes tables de la base de données -->
-        <class>fr.iut2.projetjpa.data.Etudiant</class>
-        <class>fr.iut2.projetjpa.data.Groupe</class>
-
+        <class>iut2.zahafkri_projet_java_web1.Etudiant</class>
+        <class>iut2.zahafkri_projet_java_web1.Groupe</class>
+        <class>iut2.zahafkri_projet_java_web1.Matiere</class>
         <!-- Propriétés de l'unité de persistence -->
         <properties>
 
