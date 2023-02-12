@@ -97,4 +97,22 @@ public class Etudiant implements Serializable {
 	public void setMatieres(List<Matiere> matieres) {
 		this.matieres = matieres;
 	}
+
+	public void addMatiere(Matiere matiere) {
+		if (!matieres.contains(matiere)) {
+			matieres.add(matiere);
+		}
+		if (!matiere.getEtudiants().contains(this)) {
+			matiere.getEtudiants().add(this);
+		}
+	}
+
+	public void addNoteExamen(NoteExamen noteExamen) {
+		if (!matieres.contains(noteExamen.getMatiere())) {
+			matieres.add(noteExamen.getMatiere());
+		}
+		if (!noteExamen.getMatiere().getEtudiants().contains(this)) {
+			noteExamen.getMatiere().getEtudiants().add(this);
+		}
+	}
 }

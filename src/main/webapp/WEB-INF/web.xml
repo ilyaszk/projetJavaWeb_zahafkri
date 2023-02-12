@@ -44,6 +44,10 @@
             <param-name>urlAbsences</param-name>
             <param-value>/WEB-INF/JSP/absences.jsp</param-value>
         </init-param>
+        <init-param>
+            <param-name>urlCreationEtudiant</param-name>
+            <param-value>/WEB-INF/JSP/creationEtudiant.jsp</param-value>
+        </init-param>
     </servlet>
 
     <!-- Mapping URL/Servlet -->

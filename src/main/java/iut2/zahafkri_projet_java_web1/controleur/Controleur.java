@@ -21,6 +21,7 @@ public class Controleur extends HttpServlet {
     private String urlDetails;
     private String urlNotes;
     private String urlAbsences;
+    private String urlCreationEtudiant;
 
     // INIT
     @Override
@@ -29,6 +30,7 @@ public class Controleur extends HttpServlet {
         urlDetails = getInitParameter("urlDetails");
         urlNotes = getInitParameter("urlNotes");
         urlAbsences = getInitParameter("urlAbsences");
+        urlCreationEtudiant = getInitParameter("urlCreationEtudiant");
 
         // Création de la factory permettant la création d'EntityManager
         // (gestion des transactions)
@@ -102,9 +104,9 @@ public class Controleur extends HttpServlet {
             // Creation des notes random float [0, 20] pour chaque matière de chaque étudiant
             for (Etudiant etudiant : EtudiantDAO.getAll()) {
                 for (Matiere matiere : etudiant.getMatieres()) {
-//                    NoteExamenDAO.create(etudiant, matiere, matiere.getNom() + " Oral", (float) (Math.random() * 20));
-//                    NoteExamenDAO.create(etudiant, matiere, matiere.getNom() + " TP", (float) (Math.random() * 20));
-                    NoteExamenDAO.create(etudiant, matiere, matiere.getNom() + " Examen", (float) (Math.random() * 20));
+                    NoteExamenDAO.create(etudiant, matiere, matiere.getNom() + " Oral");
+                    NoteExamenDAO.create(etudiant, matiere, matiere.getNom() + " TP");
+                    NoteExamenDAO.create(etudiant, matiere, matiere.getNom() + " Examen");
                 }
             }
         }
@@ -139,6 +141,10 @@ public class Controleur extends HttpServlet {
             doDetails(request, response);
         } else if (methode.equals("post") && action.equals("/absences")) {
             doAbsences(request, response);
+        } else if (methode.equals("post") && action.equals("/creationEtudiant")) {
+            doCreationEtudiant(request, response);
+        } else if (methode.equals("post") && action.equals("/index")) {
+            doIndex(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -164,14 +170,14 @@ public class Controleur extends HttpServlet {
         // Exécution action
         if (methode.equals("get") && action.equals("/index")) {
             doIndex(request, response);
-
         } else if (methode.equals("get") && action.equals("/details")) {
             doDetails(request, response);
-
         } else if (methode.equals("get") && action.equals("/notes")) {
             doNotes(request, response);
         } else if (methode.equals("get") && action.equals("/absences")) {
             doAbsences(request, response);
+        } else if (methode.equals("get") && action.equals("/creationEtudiant")) {
+            doCreationEtudiant(request, response);
         } else {
             doIndex(request, response);
         }
@@ -188,7 +194,7 @@ public class Controleur extends HttpServlet {
         loadJSP(urlIndex, request, response);
     }
 
-    //
+
     private void doDetails(HttpServletRequest request,
                            HttpServletResponse response) throws ServletException, IOException {
 
@@ -256,11 +262,7 @@ public class Controleur extends HttpServlet {
             int nbAbsences = Integer.parseInt(request.getParameter("nbAbsences"));
             Etudiant etudiant = getEtudiantById(id);
             etudiant.setNbAbsences(nbAbsences);
-            try {
-                EtudiantDAO.update(etudiant);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            EtudiantDAO.update(etudiant);
         }
 
 
@@ -268,6 +270,36 @@ public class Controleur extends HttpServlet {
         request.setAttribute("etudiants", etudiants);
         request.setAttribute("edit", edit);
         loadJSP(urlAbsences, request, response);
+    }
+
+    private void doCreationEtudiant(HttpServletRequest request,
+                                    HttpServletResponse response) throws ServletException, IOException {
+        // Récupérer les groupes
+        // Récupérer les matières
+        // Ajouter les groupes et les matières à la requête pour affichage
+        // Afficher la page de création d'un étudiant
+
+        if (request.getMethod().equals("POST")){
+            String nom = request.getParameter("nom");
+            String prenom = request.getParameter("prenom");
+            Groupe groupe = GroupeDAO.getGroupeById(Integer.parseInt(request.getParameter("groupe")));
+            Etudiant etudiant = EtudiantDAO.create(nom, prenom, groupe, 0);
+            String[] matieres = request.getParameterValues("matiere");
+            for (String matiere : matieres) {
+                etudiant.addMatiere(MatiereDAO.getMatiereById(Integer.parseInt(matiere)));
+                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)),"Oral");
+                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)),"Examen");
+                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)),"TP");
+            }
+            EtudiantDAO.update(etudiant);
+        }
+
+        List<Groupe> groupes = GroupeDAO.getAll();
+        List<Matiere> matieres = MatiereDAO.getAll();
+
+        request.setAttribute("groupes", groupes);
+        request.setAttribute("matieres", matieres);
+        loadJSP(urlCreationEtudiant, request, response);
     }
 
 

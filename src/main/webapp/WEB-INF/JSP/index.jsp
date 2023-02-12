@@ -13,6 +13,7 @@
 <jsp:include page='<%= application.getInitParameter("entetedepage") %>'/>
 <h2>Voici la liste des étudiants</h2>
 
+    <a href="<%=application.getContextPath()%>/do/creationEtudiant" class="btn btn-primary">Creer un étudiant</a>
 <%--realise un tableau avec la liste des etudiants avec une redirection vers la page details sur la ligne--%>
     <table class="table table-striped table-hover">
         <thead>

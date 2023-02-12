@@ -5,9 +5,9 @@ import javax.persistence.Query;
 import java.util.List;
 
 public class NoteExamenDAO {
-    public static void create(Etudiant etudiant, Matiere matiere, String nomExamen, float note) {
+    public static void create(Etudiant etudiant, Matiere matiere, String nomExamen) {
         EntityManager em = GestionFactory.factory.createEntityManager();
-        NoteExamen noteExamen = new NoteExamen(etudiant, matiere, nomExamen, note);
+        NoteExamen noteExamen = new NoteExamen(etudiant, matiere, nomExamen);
         em.getTransaction().begin();
         em.persist(noteExamen);
         em.getTransaction().commit();

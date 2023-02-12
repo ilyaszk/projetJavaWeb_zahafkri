@@ -48,8 +48,8 @@
                 <%} else {%>
                 <form action="<%=application.getContextPath()%>/do/absences?edit=true" method="post" class="d-flex">
                     <input type="hidden" name="id" value="<%= etudiant.getId() %>">
-                    <input type="number" name="nbAbsences" value="<%= etudiant.getNbAbsences() %>" class="form-control w-50">
-                    <input type="submit" value="Modifier" class="btn btn-primary">
+                    <input type="number" name="nbAbsences" value="<%= etudiant.getNbAbsences() %>" class="form-control w-50" min="0" max="100">
+                    <input type="submit" value="Modifier" class="btn btn-primary ms-2">
                 </form>
                 <%}%>
             </td>

@@ -22,6 +22,7 @@ public class Groupe implements Serializable {
 
     @OneToMany(mappedBy = "groupe", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})    // LAZY = fetch when needed, EAGER = fetch immediately
     private List<Etudiant> etudiants;
+    
 
     public Groupe() {
         super();

@@ -28,7 +28,7 @@
 <div style="width: 100%; display: flex; justify-content: center;">
     <div class="card mb-3" style="width: 25rem; border: black solid 1px;">
         <div class="card-body text-center">
-            <h5 class="card-title"><%= edit %>
+            <h5 class="card-title">Etudiant : <%=etudiant.getNom()%> <%=etudiant.getPrenom()%>
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">Groupe : <%=etudiant.getGroupe().getNom()%>
             </h6>
@@ -92,9 +92,11 @@
     </div>
     <%}%>
 
+    <% if (edit) {%>
     <button type="submit" class="btn btn-primary mx-auto">
         Valider les modifications
     </button>
+    <%}%>
 </form>
 <jsp:include page='<%= application.getInitParameter("pieddepage") %>'/>
 

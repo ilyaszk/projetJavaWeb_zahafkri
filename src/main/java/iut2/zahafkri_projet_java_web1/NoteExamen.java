@@ -36,6 +36,12 @@ public class NoteExamen {
         this.note = note;
     }
 
+    public NoteExamen(Etudiant etudiant, Matiere matiere, String nomExamen) {
+        this.etudiant = etudiant;
+        this.matiere = matiere;
+        this.nomExamen = nomExamen;
+    }
+
     public long getId() {
         return id;
     }
