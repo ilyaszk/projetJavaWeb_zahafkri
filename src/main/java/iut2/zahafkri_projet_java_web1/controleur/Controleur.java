@@ -310,10 +310,10 @@ public class Controleur extends HttpServlet {
             int nbAbsences = Integer.parseInt(request.getParameter("nbAbsences"));
             Etudiant etudiant = getEtudiantById(id);
             etudiant.setNbAbsences(nbAbsences);
-            try{
+            try {
                 EtudiantDAO.update(etudiant);
                 succes = "Les absences ont été mises à jour";
-            }catch (Exception e){
+            } catch (Exception e) {
                 erreur = "Une erreur est survenue";
             }
         }
@@ -334,25 +334,36 @@ public class Controleur extends HttpServlet {
         // Récupérer les matières
         // Ajouter les groupes et les matières à la requête pour affichage
         // Afficher la page de création d'un étudiant
-
+        String erreur = "";
+        String succes = "";
         if (request.getMethod().equals("POST")) {
-            String nom = request.getParameter("nom");
-            String prenom = request.getParameter("prenom");
-            Groupe groupe = GroupeDAO.getGroupeById(Integer.parseInt(request.getParameter("groupe")));
-            Etudiant etudiant = EtudiantDAO.create(nom, prenom, groupe);
-            String[] matieres = request.getParameterValues("matiere");
-            for (String matiere : matieres) {
-                etudiant.addMatiere(MatiereDAO.getMatiereById(Integer.parseInt(matiere)));
-                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)), "Oral");
-                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)), "Examen");
-                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)), "TP");
+            if (request.getParameterValues("matiere") != null) {
+                String nom = request.getParameter("nom");
+                String prenom = request.getParameter("prenom");
+                Groupe groupe = GroupeDAO.getGroupeById(Integer.parseInt(request.getParameter("groupe")));
+                try {
+                    Etudiant etudiant = EtudiantDAO.create(nom, prenom, groupe);
+                    String[] matieres = request.getParameterValues("matiere");
+                    for (String matiere : matieres) {
+                        etudiant.addMatiere(MatiereDAO.getMatiereById(Integer.parseInt(matiere)));
+                        NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)), "Oral");
+                        NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)), "Examen");
+                        NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)), "TP");
+                    }
+                    EtudiantDAO.update(etudiant);
+                    succes = "L'étudiant a été créé";
+                } catch (Exception e) {
+                    erreur = "Une erreur est survenue!";
+                }
+            } else {
+                erreur = "Attention, vous devez choisir au moins une matière, Reessayez!";
             }
-            EtudiantDAO.update(etudiant);
         }
 
         List<Groupe> groupes = GroupeDAO.getAll();
         List<Matiere> matieres = MatiereDAO.getAll();
-
+        request.setAttribute("erreur", erreur);
+        request.setAttribute("succes", succes);
         request.setAttribute("groupes", groupes);
         request.setAttribute("matieres", matieres);
         loadJSP(urlCreationEtudiant, request, response);

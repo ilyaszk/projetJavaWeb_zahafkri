@@ -1,9 +1,13 @@
 <%@ page import="iut2.zahafkri_projet_java_web1.Groupe" %>
 <%@ page import="iut2.zahafkri_projet_java_web1.Matiere" %>
+<%@ page import="java.util.Objects" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <jsp:useBean id="groupes" type="java.util.List<iut2.zahafkri_projet_java_web1.Groupe>" scope="request"/>
 <jsp:useBean id="matieres" type="java.util.List<iut2.zahafkri_projet_java_web1.Matiere>" scope="request"/>
+<jsp:useBean id="erreur" type="java.lang.String" scope="request"/>
+<jsp:useBean id="succes" type="java.lang.String" scope="request"/>
+
 <html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -17,6 +21,17 @@
 </button>
 <h1>Creation Etudiant</h1>
 <%--card qui reprends toutes les informations de l'etudiant--%>
+<% if (!Objects.equals(erreur, "")) {%>
+<div class="alert alert-danger" role="alert">
+    <%=erreur%>
+</div>
+<%}%>
+
+<% if (!Objects.equals(succes, "")) {%>
+<div class="alert alert-success" role="alert">
+    <%=succes%>
+</div>
+<%}%>
 <div style="width: 100%; display: flex; justify-content: center;">
     <div class="card mb-3" style="width: 25rem; border: black solid 1px;">
         <div class="card-body text-center">
