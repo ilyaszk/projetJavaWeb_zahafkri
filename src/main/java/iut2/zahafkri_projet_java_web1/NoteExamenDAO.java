@@ -76,4 +76,15 @@ public class NoteExamenDAO {
         em.close();
         return notesExamens;
     }
+
+    //remonve la note by etudiant
+    public static void removeByIdEtudiant(Integer id) {
+        EntityManager em = GestionFactory.factory.createEntityManager();
+        Query query = em.createQuery("DELETE FROM NoteExamen n WHERE n.etudiant.id = :idEtu");
+        query.setParameter("idEtu", id);
+        em.getTransaction().begin();
+        query.executeUpdate();
+        em.getTransaction().commit();
+        em.close();
+    }
 }

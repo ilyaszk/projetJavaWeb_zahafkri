@@ -29,7 +29,7 @@ public class Etudiant implements Serializable {
 	private Groupe groupe;
 
 	//list<matiere>
-	@ManyToMany(mappedBy = "etudiants", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+	@ManyToMany(mappedBy = "etudiants", cascade = CascadeType.ALL)
 	private List<Matiere> matieres;
 
 	private static final long serialVersionUID = 1L;

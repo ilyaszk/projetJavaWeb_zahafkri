@@ -40,6 +40,7 @@ public class NoteExamen {
         this.etudiant = etudiant;
         this.matiere = matiere;
         this.nomExamen = nomExamen;
+        this.note = -1;
     }
 
     public long getId() {

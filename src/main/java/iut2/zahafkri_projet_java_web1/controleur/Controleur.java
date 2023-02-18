@@ -22,6 +22,7 @@ public class Controleur extends HttpServlet {
     private String urlNotes;
     private String urlAbsences;
     private String urlCreationEtudiant;
+    private String urlSupprimerEtudiant;
 
     // INIT
     @Override
@@ -31,6 +32,7 @@ public class Controleur extends HttpServlet {
         urlNotes = getInitParameter("urlNotes");
         urlAbsences = getInitParameter("urlAbsences");
         urlCreationEtudiant = getInitParameter("urlCreationEtudiant");
+        urlSupprimerEtudiant = getInitParameter("urlSupprimerEtudiant");
 
         // Création de la factory permettant la création d'EntityManager
         // (gestion des transactions)
@@ -62,16 +64,16 @@ public class Controleur extends HttpServlet {
             Groupe MESSI = GroupeDAO.create("MESSI");
 
             // Creation des étudiants
-            EtudiantDAO.create("Francis", "Brunet-Manquat", MIAM, 20);
-            EtudiantDAO.create("Philippe", "Martin", MIAM, 19);
-            EtudiantDAO.create("Mario", "Cortes-Cornax", MIAM, 12);
-            EtudiantDAO.create("Françoise", "Coat", SIMO, 12);
-            EtudiantDAO.create("Laurent", "Bonnaud", MESSI, 12);
-            EtudiantDAO.create("Sébastien", "Bourdon", MESSI, 12);
-            EtudiantDAO.create("Mathieu", "Gatumel", SIMO, 12);
-            EtudiantDAO.create("Jean", "Boulet", SIMO, 12);
-            EtudiantDAO.create("Juilien", "Boulet", SIMO, 12);
-            EtudiantDAO.create("lkdnhkhqs", "tatata", SIMO, 12);
+            EtudiantDAO.create("Francis", "Brunet-Manquat", MIAM);
+            EtudiantDAO.create("Philippe", "Martin", MIAM);
+            EtudiantDAO.create("Mario", "Cortes-Cornax", MIAM);
+            EtudiantDAO.create("Françoise", "Coat", SIMO);
+            EtudiantDAO.create("Laurent", "Bonnaud", MESSI);
+            EtudiantDAO.create("Sébastien", "Bourdon", MESSI);
+            EtudiantDAO.create("Mathieu", "Gatumel", SIMO);
+            EtudiantDAO.create("Jean", "Boulet", SIMO);
+            EtudiantDAO.create("Juilien", "Boulet", SIMO);
+            EtudiantDAO.create("lkdnhkhqs", "tatata", SIMO);
 
 
             //inscrire les étudiants dans les matières
@@ -145,6 +147,8 @@ public class Controleur extends HttpServlet {
             doCreationEtudiant(request, response);
         } else if (methode.equals("post") && action.equals("/index")) {
             doIndex(request, response);
+        } else if (methode.equals("post") && action.equals("/supprimerEtudiant")) {
+            doSupprimerEtudiant(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -178,6 +182,8 @@ public class Controleur extends HttpServlet {
             doAbsences(request, response);
         } else if (methode.equals("get") && action.equals("/creationEtudiant")) {
             doCreationEtudiant(request, response);
+        } else if (methode.equals("get") && action.equals("/supprimerEtudiant")) {
+            doSupprimerEtudiant(request, response);
         } else {
             doIndex(request, response);
         }
@@ -188,10 +194,33 @@ public class Controleur extends HttpServlet {
                          HttpServletResponse response) throws ServletException, IOException {
         // Récupérer les étudiants
         List<Etudiant> etudiants = EtudiantDAO.getAll();
-
+        String erreur = "";
+        String succes = "";
         // Ajouter les étudiants à la requête pour affichage
         request.setAttribute("etudiants", etudiants);
+        request.setAttribute("erreur", erreur);
+        request.setAttribute("succes", succes);
         loadJSP(urlIndex, request, response);
+    }
+
+    private void doSupprimerEtudiant(HttpServletRequest request,
+                                     HttpServletResponse response) throws ServletException, IOException {
+
+        String erreur = "";
+        String succes = "";
+        int id = Integer.parseInt(request.getParameter("id"));
+        try {
+            NoteExamenDAO.removeByIdEtudiant(id);
+            EtudiantDAO.remove(id);
+            succes = "Etudiant supprimé";
+        } catch (Exception e) {
+            erreur = "Impossible de supprimer l'étudiant";
+        }
+        List<Etudiant> etudiants = EtudiantDAO.getAll();
+        request.setAttribute("erreur", erreur);
+        request.setAttribute("succes", succes);
+        request.setAttribute("etudiants", etudiants);
+        loadJSP(urlSupprimerEtudiant, request, response);
     }
 
 
@@ -207,23 +236,42 @@ public class Controleur extends HttpServlet {
 
         Boolean edit = Boolean.parseBoolean(request.getParameter("edit"));
 
-        // je récupère les notes du formulaire seulement avec le prefixe note_ et je les mets dans une map avec comme clé l'id de la note sans le prefixe
+        // je récupère les notes du formulaire seulement avec le prefixe note_ et je les mets dans une map avec comme clé l'id de la note sans le prefixe et comme valeur =! ""
         Map<String, String[]> map = request.getParameterMap().entrySet().stream()
                 .filter(e -> e.getKey().startsWith("note_"))
-                .collect(Collectors.toMap(e -> e.getKey().replace("note_", ""), Map.Entry::getValue));
+                .collect(Collectors.toMap(e -> e.getKey().substring(5), Map.Entry::getValue));
+
 
         if (request.getMethod().equals("POST")) {
             // je parcours les notes de l'étudiant et je les mets à jour si elles sont différentes de celles du formulaire
             for (Matiere matiere : etudiant.getMatieres()) {
                 for (NoteExamen noteExamen : matiere.getNotesExamen()) {
                     String[] note = map.get(String.valueOf(noteExamen.getId()));
-                    if (note != null && note.length > 0) {
+                    if (note != null && note.length > 0 && !note[0].equals("")) {
                         float noteValue = Float.parseFloat(note[0]);
                         if (noteValue != noteExamen.getNote()) {
                             if ((noteValue >= 0 && noteValue <= 20) && String.valueOf(noteValue).matches("^[0-9]+([.][0-9]+)?$")) {
                                 noteExamen.setNote(noteValue);
                                 NoteExamenDAO.update(noteExamen);
-                                succes = "Les notes ont été mises à jour";
+                                //update de la moyenne generale de l'etudiant
+                                float moyenne = 0;
+                                int nbNotes = 0;
+                                List<NoteExamen> notesEtudiant = NoteExamenDAO.retrieveByEtudiant(etudiant);
+                                for (NoteExamen noteMoyenne : notesEtudiant) {
+                                    if (noteMoyenne.getNote() != -1) {
+                                        moyenne += noteMoyenne.getNote();
+                                        nbNotes++;
+                                    }
+                                }
+                                moyenne = moyenne / nbNotes;
+                                etudiant.setMoyenneGenerale(moyenne);
+                                try {
+                                    EtudiantDAO.update(etudiant);
+                                    succes = "Les notes ont été mises à jour";
+                                } catch (Exception e) {
+                                    erreur = "Une erreur est survenue lors de la mise à jour des notes";
+                                }
+
                             } else {
                                 erreur = "La note doit être comprise entre 0 et 20 et ne doit pas contenir de caractères spéciaux";
                             }
@@ -253,8 +301,8 @@ public class Controleur extends HttpServlet {
     private void doAbsences(HttpServletRequest request,
                             HttpServletResponse response) throws ServletException, IOException {
         // Récupérer les étudiants
-        List<Etudiant> etudiants = EtudiantDAO.getAll();
-
+        String erreur = "";
+        String succes = "";
         Boolean edit = Boolean.parseBoolean(request.getParameter("edit"));
 
         if (request.getMethod().equals("POST")) {
@@ -262,13 +310,21 @@ public class Controleur extends HttpServlet {
             int nbAbsences = Integer.parseInt(request.getParameter("nbAbsences"));
             Etudiant etudiant = getEtudiantById(id);
             etudiant.setNbAbsences(nbAbsences);
-            EtudiantDAO.update(etudiant);
+            try{
+                EtudiantDAO.update(etudiant);
+                succes = "Les absences ont été mises à jour";
+            }catch (Exception e){
+                erreur = "Une erreur est survenue";
+            }
         }
+        List<Etudiant> etudiants = EtudiantDAO.getAll();
 
 
         // Ajouter les étudiants à la requête pour affichage
         request.setAttribute("etudiants", etudiants);
         request.setAttribute("edit", edit);
+        request.setAttribute("erreur", erreur);
+        request.setAttribute("succes", succes);
         loadJSP(urlAbsences, request, response);
     }
 
@@ -279,17 +335,17 @@ public class Controleur extends HttpServlet {
         // Ajouter les groupes et les matières à la requête pour affichage
         // Afficher la page de création d'un étudiant
 
-        if (request.getMethod().equals("POST")){
+        if (request.getMethod().equals("POST")) {
             String nom = request.getParameter("nom");
             String prenom = request.getParameter("prenom");
             Groupe groupe = GroupeDAO.getGroupeById(Integer.parseInt(request.getParameter("groupe")));
-            Etudiant etudiant = EtudiantDAO.create(nom, prenom, groupe, 0);
+            Etudiant etudiant = EtudiantDAO.create(nom, prenom, groupe);
             String[] matieres = request.getParameterValues("matiere");
             for (String matiere : matieres) {
                 etudiant.addMatiere(MatiereDAO.getMatiereById(Integer.parseInt(matiere)));
-                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)),"Oral");
-                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)),"Examen");
-                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)),"TP");
+                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)), "Oral");
+                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)), "Examen");
+                NoteExamenDAO.create(etudiant, MatiereDAO.getMatiereById(Integer.parseInt(matiere)), "TP");
             }
             EtudiantDAO.update(etudiant);
         }

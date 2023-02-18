@@ -12,7 +12,7 @@ public class Matiere {
 
 	private String nom;
 
-	@OneToMany(mappedBy = "matiere")
+	@OneToMany(mappedBy = "matiere", cascade = CascadeType.ALL)
 	private List<NoteExamen> notesExamen;
 
 	@ManyToMany

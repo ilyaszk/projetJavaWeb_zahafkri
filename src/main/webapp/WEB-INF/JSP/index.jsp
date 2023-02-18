@@ -1,8 +1,12 @@
 <%@ page import="iut2.zahafkri_projet_java_web1.Etudiant" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Objects" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<jsp:useBean id="etudiants" type="java.util.List<iut2.zahafkri_projet_java_web1.Etudiant>" scope="request" />
+<jsp:useBean id="etudiants" type="java.util.List<iut2.zahafkri_projet_java_web1.Etudiant>" scope="request"/>
+<jsp:useBean id="erreur" type="java.lang.String" scope="request"/>
+<jsp:useBean id="succes" type="java.lang.String" scope="request"/>
+
 <html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -13,28 +17,44 @@
 <jsp:include page='<%= application.getInitParameter("entetedepage") %>'/>
 <h2>Voici la liste des étudiants</h2>
 
-    <a href="<%=application.getContextPath()%>/do/creationEtudiant" class="btn btn-primary">Creer un étudiant</a>
+<a href="<%=application.getContextPath()%>/do/creationEtudiant" class="btn btn-primary">Creer un étudiant</a>
 <%--realise un tableau avec la liste des etudiants avec une redirection vers la page details sur la ligne--%>
-    <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-            <th>Groupe</th>
-            <th>Nom</th>
-            <th>Prénom</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% for (Etudiant etudiant : etudiants) {%>
-        <tr>
-            <td><%= etudiant.getGroupe().getNom() %></td>
-            <td><%= etudiant.getNom() %></td>
-            <td><%= etudiant.getPrenom() %></td>
-            <td><a href="<%=application.getContextPath()%>/do/details?id=<%= etudiant.getId() %>" class="btn btn-primary">Détails</a></td>
-        </tr>
-        <%}%>
-        </tbody>
-    </table>
-<jsp:include page='<%= application.getInitParameter("pieddepage") %>'/>
+<% if (!Objects.equals(erreur, "")) {%>
+<div class="alert alert-danger" role="alert">
+    <%=erreur%>
+</div>
+<%}%>
+
+<% if (!Objects.equals(succes, "")) {%>
+<div class="alert alert-success" role="alert">
+    <%=succes%>
+</div>
+<%}%>
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>Groupe</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% for (Etudiant etudiant : etudiants) {%>
+    <tr>
+        <td><%= etudiant.getGroupe().getNom() %>
+        </td>
+        <td><%= etudiant.getNom() %>
+        </td>
+        <td><%= etudiant.getPrenom() %>
+        </td>
+        <td><a href="<%=application.getContextPath()%>/do/details?id=<%= etudiant.getId() %>" class="btn btn-primary">Détails</a>
+            <a href="<%=application.getContextPath()%>/do/supprimerEtudiant?id=<%= etudiant.getId() %>" class="btn btn-danger">Supprimer</a>
+        </td>
+    </tr>
+    <%}%>
+    </tbody>
+</table>
+
 
 </body>
 </html>

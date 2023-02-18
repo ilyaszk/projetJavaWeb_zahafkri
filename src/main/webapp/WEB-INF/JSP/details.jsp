@@ -63,15 +63,15 @@
                     <% if (!edit) {%>
                     <td><%=note.getNomExamen()%>
                     </td>
-                    <td><%=note.getNote()%>
+                    <td><%=note.getNote() != -1 ? note.getNote() : ""%>
                     </td>
                     <%} else {%>
                     <td><%=note.getNomExamen()%>
                     </td>
-                    <td><input class="form-control" type="text" name="note_<%=note.getId()%>"
-                               value="<%=note.getNote()%>"></td>
-                    <%}%>
-                    <%}%>
+                    <td><input class="form-control" type="number" name="note_<%=note.getId()%>" max="20" min="0" step="0.01"
+                               value="<%=note.getNote() != -1 ? note.getNote() : null %>">
+                            <%}%>
+                            <%}%>
                 </tr>
                 <%}%>
                 </tbody>
@@ -98,7 +98,7 @@
     </button>
     <%}%>
 </form>
-<jsp:include page='<%= application.getInitParameter("pieddepage") %>'/>
+
 
 </body>
 </html>

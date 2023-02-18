@@ -23,13 +23,6 @@
             <img src="https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
                  class="card-img-top img-thumbnail" alt="...">
             <form action="<%=application.getContextPath()%>/do/creationEtudiant" method="post">
-                <%--
-                input qui permet de recuperer le nom de l'etudiant obligatoire
-                input qui permet de recuperer le prenom de l'etudiant obligatoire
-                liste deroulante qui permet de selectionner la un groupe
-                et des cases a cocher qui permettent de selectionner les matieres <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btn-check-outlined">Single toggle</label><br>
-                --%>
                 <input type="text" name="nom" placeholder="Nom" class="form-control my-2" required>
                 <input type="text" name="prenom" placeholder="Prenom" class="form-control my-2" required>
                 <select name="groupe" class="form-select my-2">
@@ -46,7 +39,7 @@
         </div>
     </div>
 </div>
-<jsp:include page='<%= application.getInitParameter("pieddepage") %>'/>
+
 
 </body>
 </html>

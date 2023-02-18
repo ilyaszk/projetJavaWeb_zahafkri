@@ -1,10 +1,13 @@
 <%@ page import="iut2.zahafkri_projet_java_web1.GestionFactory" %>
 <%@ page import="iut2.zahafkri_projet_java_web1.Etudiant" %>
+<%@ page import="java.util.Objects" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
 <jsp:useBean id="etudiants" type="java.util.List<iut2.zahafkri_projet_java_web1.Etudiant>" scope="request"/>
 <jsp:useBean id="edit" type="java.lang.Boolean" scope="request"/>
+<jsp:useBean id="erreur" type="java.lang.String" scope="request"/>
+<jsp:useBean id="succes" type="java.lang.String" scope="request"/>
 
 <html>
 <head>
@@ -21,6 +24,17 @@
     <a class="btn btn-primary" href="<%=application.getContextPath()%>/do/absences?edit=true">Editer les absences</a>
     <%} else {%>
     <a class="btn btn-primary" href="<%=application.getContextPath()%>/do/absences">Terminer l'édition</a>
+    <%}%>
+    <% if (!Objects.equals(erreur, "")) {%>
+    <div class="alert alert-danger" role="alert">
+        <%=erreur%>
+    </div>
+    <%}%>
+
+    <% if (!Objects.equals(succes, "")) {%>
+    <div class="alert alert-success" role="alert">
+        <%=succes%>
+    </div>
     <%}%>
     <table
             class="table table-striped table-hover table-bordered table-sm">
@@ -58,7 +72,7 @@
         </tbody>
     </table>
 </div>
-<jsp:include page='<%= application.getInitParameter("pieddepage") %>'/>
+
 
 </body>
 </html>
